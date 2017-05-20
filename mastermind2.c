@@ -46,51 +46,74 @@ void guess_my_number(char *secret_number)
 	fgets(my_number, 5, stdin);
 	my_number[strlen(my_number) - 1] = '\0';
 	while (( c = getchar()) != '\n' && c != EOF){}
-	printf("This is whole number: %s\n", my_number);	
-	//printf("This is one of the numbers: %c\n", new_number[2]);	
-	//printf("this is my secret number %c", *(secret_number  + 1));
+	//printf("This is whole number: %s\n", my_number);	
+	printf("TEST TEST TEST This is one of the numbers: %c\n", my_number[2]);	
+	printf("TEST TEST  TEST this is my secret number %c\n\n\n", *(secret_number  + 1));
 	int red_count = 0, white_count = 0;
 	//printf("entering loop");
 	int count = 0;
 	int tmp_count = 0;
-	int win_count = 0
-	while(1){			
+	int win_count = 0;
+	char win_array[5];
+	int red = 0, white = 0;
+	while(win_count != 4){			
+		count++;		
 		for (int i = 0; i < 4; i++){
 			if(my_number[i] == *(secret_number + i)){
-					printf("my number i is %d", my_number[i]);
+					printf("In first\n");					
+					//printf("my number i is %d", my_number[i]);
 					win_count++;
-					continue;
+					printf("wincount %d", win_count);
+					//continue;
 			}else{
-				for(int x = 1; x < 4; x++){			
-					//printf("for loop statement");	
-					//printf("%c %c\n", my_number[0], *secret_number);		
-					if(my_number[i] == *(secret_number + x)){
-						printf("my number i is %d", my_number[i]);
-						red_count++;
-						i++;
-					
-					//else if (my_number[i] == *(secret_number + (x))){
-					//	red_count++;					
-					//	printf("my number i is %d", my_number[i]);
-					//	break;
-					}else{
-						white_count++;
-					}
-				}
+				break;
 			}		
-		}	
-		count++;			
+		}
+		//printf("Next loop is coming");
 		if(win_count == 4){
 			printf("guessed correctly\n");
-			printf("%d red\n", red_count);
+			printf("%d red\n", win_count);
 			printf("it took you %d guesses ", count);
 			break;
-		}else{
-			printf("%d red, %d white\n", red_count, white_count);
-			red_count = 0;
-			white_count = 0;
 		}
+		printf("Next loop is here");
+		for(int i = 0; i < 4; i++){
+			for(int x = 0; x < 4; x++){			
+				//printf("for loop statement");	
+				//printf("%c %c\*secret_number);
+				printf("This is secret number:  %c\n", *(secret_number + x));
+				printf("my number i is now :  %c\n", my_number[i]);		
+				if(my_number[i] == *(secret_number + x)){
+					printf("my number i is %c", my_number[i]);
+					red_count++;
+					win_array[i] = '1';
+					break;
+				//else if (my_number[i] == *(secret_number + (x))){
+				//					
+				//	printf("my number i is %d", my_number[i]);
+				//	break;
+				}else{
+					white_count++;
+					if (white_count == 4){
+						win_array[i] = '0';
+					}
+				}
+			}
+		}							
+		for (int number = 0; number < 4; number++){
+			if (win_array[number] == '1'){
+				red += 1;
+			}else{
+				white += 1;
+			}	
+		}
+		printf("This is count: %d red, %d white\n", red, white);
+		red = 0;
+		white = 0;
+		win_count = 0;
+		
 		my_number[0] = '\0';
+		printf("Guess again");
 		fgets(my_number, 5, stdin);
 		my_number[strlen(my_number) - 1] = '\0';
 		while (( c = getchar()) != '\n' && c != EOF){}
