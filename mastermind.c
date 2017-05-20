@@ -6,22 +6,22 @@
 char random_number_generator();
 void guess_the_number(char *secret_number);
 
-void main()
+int main()
 {
 	srand(time(NULL));	
 	char final_result_array[4];
 	for (int i = 0; i < 4; i++){	
-		final_result_array[i]  = random__number_generator();
-		printf("final[i] = %c\n", final_result_array[i]);		
+		final_result_array[i]  = random_number_generator();
 	}
 	guess_the_number(final_result_array);
+	return(0);
 }
 
 char random_number_generator()
 {
-	char buffer[20];	
+		
 	int result;
-	char result2;	
+		
 	static int num = 0;
 	result = rand() % 10;
 	
@@ -43,63 +43,57 @@ void guess_the_number(char *secret_number)
 	char c; 		
 	char my_number[5];
 	
-	int red_count = 0, white_count = 0;
-	//printf("entering loop");
+	//int red_count = 0, white_count = 0;
 	int count = 0;
-	int tmp_count = 0;
-	int win_count = 0;
-	int win_array[16] = {0};
+	int array_of_whites[16] = {0};
 	int red = 0, white = 0;
-	char *temp_array;
+	
 	int count_a = 0, count_b = 0, count_c = 0, count_d = 0;	
 	while(1){			
 		printf("Guessing>");		
 		fgets(my_number, 5, stdin);
 		while (( c = getchar()) != '\n' && c != EOF){}	
-		//printf("TEST TEST TEST This is one of the numbers: %c\n", my_number[3]);	
-		//printf("TEST TEST  TEST this is my secret number %c\n\n\n", *(secret_number  + 3));
 		count++;		
-		for (int i = 0; i < 4; i++){               //all correct
+		for (int i = 0; i < 4; i++){               
 			if(my_number[i] == *(secret_number + i)){
-				win_count++;
 				red++;
 			}	
 		}
-		if (win_count == 4){
-			printf("You won\n");			
+		if (red == 4){
+			printf("You won\n");
+			printf("It took you %d guesses", count);			
 			break;		
 		}
-		win_count = 0;
-		red = 0;
-		
-		//mismatched values
 		int win_number = 0;	
-		//printf("Pre win array values %d", win_aray[5]);	
+			
 		for (int num = 0; num < 4; num++){
-			for (int inside_num = 0; inside_num < 4 && win_number < 16; inside_num++ && win_number++){
-				if (my_number[num] == *(secret_number + inside_num)){
-					win_array[win_number] = num;
-					printf("inside number %d\n", inside_num);
-					printf("win array number %d \n", win_array[win_number]);
+			for (int inside_num = 0; inside_num < 4; inside_num++){
+				if (my_number[num] == *(secret_number + inside_num) && num != inside_num){
+					if (num == 0){
+						
+					}					
+					array_of_whites[win_number] = num;
+					printf("win array number %d \n", array_of_whites[win_number]); // answer line
+					win_number++;
 					continue;
 				}
 			}
-			printf(win_array[8]);
 		}
-		for (int x = 0; x < ((sizeof(win_array)/4)) && count_a < 6 && count_b < 6 && count_c < 6 && count_d < 6; x++){
-			//printf("This is win_array %d\n", win_array[x]);		
-			if(win_array[x] == 0){
+		// This iterates to through the aray for whites
+		for (int x = 0; x < ((sizeof(array_of_whites)/4)) && count_a < 4 && count_b <  4 && count_c < 4 && count_d < 4; x++){
+			//printf("This is array_of_whites %d\n", array_of_whites[x]);		
+			if(array_of_whites[x] == 0){
 				count_a++;
 				printf("This is count_a %d \n", count_a);
 			}
-			else if(win_array[x] == 1){
+			else if(array_of_whites[x] == 1){
 				count_b++;
 				printf("This is count_b %d \n", count_b);
 			}
-			else if(win_array[x] == 2){
+			else if(array_of_whites[x] == 2){
 				count_c++;
 				printf("This is count_c %d \n", count_c);
-			}else if(win_array[x] == 3){
+			}else if(array_of_whites[x] == 3){
 				count_d++;
 				printf("This is count_d %d \n", count_d);
 			}else{
@@ -107,22 +101,44 @@ void guess_the_number(char *secret_number)
 			}
 				
 		}
-		if (count_a > 0){
-			red += 1;
+		if (count_a > 0){	//because the null pointer always has zero
+			white += 1;
 		}
 		if (count_b > 0){
-			red += 1;
+			white += 1;
 		}
 		if (count_c > 0){
-			red += 1;
+			white += 1;
 		}
 		if (count_d > 0){
-			red += 1;
+			white += 1;
 		}
-		white = 4 - red;
+		int missed_numbers = 4 - (red + white-1);
 	
-		printf("THis is your count %d REDS, and %d WHITES\n", red, white);
-		win_array[0] = '\0';
+		if(count_a > 3 || count_b > 3 || count_c > 3 || count_d > 3){
+			white = 1;
+			if (red > 0){
+				white -= 1;
+			}
+
+		}//int guess_feedback;		
+		if (missed_numbers == 4){
+			printf("No matches\n");
+		}		
+		else if (white >= 3 && white < 4){
+			printf("%d white\n", white -1);
+		}else if (red < 4 && red >= 3){
+			printf("%d red\n", red);
+		}else{
+			printf("%d red, %d white", red, white );
+		} 
+		//reset variable values
+		array_of_whites[0] = '\0';
+		white = 0;
+		missed_numbers = 0;
+		red = 0;
+		count_a = count_b = count_c = count_d = 0;
+	
 	}		
 		
 }
