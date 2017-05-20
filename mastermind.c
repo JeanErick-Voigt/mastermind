@@ -3,27 +3,27 @@
 #include <time.h>
 #include <string.h>
 
-char random_generator();
-void guess_my_number(char *secret_number);
+char random_number_generator();
+void guess_the_number(char *secret_number);
 
 void main()
 {
 	srand(time(NULL));	
 	char final_result_array[4];
 	for (int i = 0; i < 4; i++){	
-		final_result_array[i]  = random_generator();
+		final_result_array[i]  = random__number_generator();
 		printf("final[i] = %c\n", final_result_array[i]);		
 	}
-	guess_my_number(final_result_array);
+	guess_the_number(final_result_array);
 }
 
-char random_generator()
+char random_number_generator()
 {
 	char buffer[20];	
 	int result;
 	char result2;	
 	static int num = 0;
-	result = rand() % 9;
+	result = rand() % 10;
 	
 
 	if(result > 0){
@@ -33,12 +33,12 @@ char random_generator()
 		
 	}else{
 		printf("bad number \n");		
-		random_generator();
+		random_number_generator();
 	}
 
 }
 
-void guess_my_number(char *secret_number)
+void guess_the_number(char *secret_number)
 {
 	char c; 		
 	char my_number[5];
